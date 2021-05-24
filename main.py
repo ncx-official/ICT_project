@@ -40,15 +40,33 @@ def get_fuel_price(view=True):  # Value 1
 	else:
 		return title, data
 
-def second():
-	pass
+
+def average_logistics_salary(view=True):  # Value 2
+	title, data = Scrap("https://www.work.ua/salary-%D0%BB%D0%BE%D0%B3%D0%B8%D1%81%D1%82/").get_logist_salary()
+	
+	if view:
+		print(f"___<{title}>___")
+		cnt = 1
+		for key, value in data.items():
+			print(f"{cnt}) {key}:  {value}")
+			cnt += 1
+		continue_point()
+	else:
+		return title, data
+
+
 def third():
 	pass
+
+
 def fourth():
 	pass
+
+
 def fifth():
 	pass
-	
+
+
 def shipping_cost_services(view=True): # Value 6
 	services = {
 		"Нова Пошта": "https://novaposhta.ua/delivery",
@@ -59,7 +77,6 @@ def shipping_cost_services(view=True): # Value 6
 		"Sat": "https://www.sat.ua/order/calculation/",
 		"Автолюкс": "https://autolux-post.com.ua/calc/"
 	}
-	
 	if view:
 		_cnt = 1
 		print("___<Сервіс>_______<Силка на сайт для обрахунків>_______")
@@ -70,6 +87,7 @@ def shipping_cost_services(view=True): # Value 6
 		return "Вирахування вартості доставки", services
 	continue_point()
 
+
 def save_to_file(number):  # Value 7
 	if number == None or number not in range(1,7):
 		print("Виникла помилка, дані не збережено")
@@ -78,7 +96,7 @@ def save_to_file(number):  # Value 7
 		if number == 1:
 			title, data = get_fuel_price(False)
 		elif number == 2:
-			title, data = second(False)
+			title, data = average_logistics_salary(False)
 		elif number == 3:
 			title, data = third(False)
 		elif number == 4:
@@ -121,7 +139,7 @@ def start_menu(logo):  # start menu, list of all function of this program
         -3: "•| ━━━━━━━━━━━━━❪✇❫━━━━━━━━━━━━━ |•",
         -2: '╭──────────────────────╯⌬╰──────────────────────╮',
         1: "Середні ціни на пальне                    |",
-        2: "# Середня зарплата Логіста                |",
+        2: "Середня зарплата Логіста                  |",
         3: "#                                         |",
         4: "#                                         |",
         5: "#                                         |",
@@ -150,7 +168,7 @@ def main():
             if number == 1:  # Fuel price in Ukraine
                 get_fuel_price()
             elif number == 2:
-                pass
+                average_logistics_salary()
             elif number == 3:
                 pass
             elif number == 4:

@@ -16,14 +16,14 @@ class Scrap():
 		return BeautifulSoup(html, 'html.parser')
 		
 	def get_fuelprice_data(self):
-		data = [[], []]
-		all_work_data = self.object.find('table', attrs={'class': 'line'})
-		title = all_work_data.find('caption').text
+		data = self.object.find('table', attrs={'class': 'line'})
+		title = data.find('caption').text
+
+		return title, dict(zip([a.text for a in data.find_all('a')], [a.text for a in data.find_all('big')]))
+
+	def get_logist_salary(self):
+		title = self.object.find("h2", attrs={'class': 'cut-bottom'}).text
+		data_cityNames = self.object.find_all("div", attrs={'class': 'chart-category'})
+		data_salary = self.object.find_all("div", attrs={'class': 'chart-data-digits'})
 	
-		for i in all_work_data.find_all('a'):
-			data[0].append(i.text)
-
-		for k in all_work_data.find_all('big'):
-			data[1].append(k.text)
-
-		return title, dict(zip(data[0], data[1]))
+		return title, dict(zip([a.text for a in data_cityNames], [a.text for a in data_salary]))
