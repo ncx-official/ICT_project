@@ -48,8 +48,27 @@ def fourth():
 	pass
 def fifth():
 	pass
-def sixth():
-	pass
+	
+def shipping_cost_services(view=True): # Value 6
+	services = {
+		"Нова Пошта": "https://novaposhta.ua/delivery",
+		"Укрпошта": "https://calc.ukrposhta.ua/domestic-calculator",
+		"Justin": "https://justin.ua/calculate",
+		"Delivery": "https://www.delivery-auto.com/uk-UA/CalculateCost",
+		"Meest": "https://ua.meest.com/calculator",
+		"Sat": "https://www.sat.ua/order/calculation/",
+		"Автолюкс": "https://autolux-post.com.ua/calc/"
+	}
+	
+	if view:
+		_cnt = 1
+		print("___<Сервіс>_______<Силка на сайт для обрахунків>_______")
+		for key, value in services.items():
+			print(f"{_cnt}) {key}:"," "*(10-len(key)), value)
+			_cnt += 1
+	else:
+		return "Вирахування вартості доставки", services
+	continue_point()
 
 def save_to_file(number):  # Value 7
 	if number == None or number not in range(1,7):
@@ -67,13 +86,13 @@ def save_to_file(number):  # Value 7
 		elif number == 5:
 			title, data= fifth(False)
 		else:
-			title, data = sixth(False)
+			title, data = shipping_cost_services(False)
 		try:
 			with open("result_data.txt", "a") as f:
 				f.write(("/\\"*15)+"\n")
 				f.write(f"___<{title}>___\n")
 				for key, value in data.items():
-					f.write(f"{key}:  {value} грн.\n")
+					f.write(f"{key}:  {value}\n")
 				f.write(("/\\"*15)+"\n\n")
 			print("Дані успішно збережено")
 		except:
@@ -100,17 +119,17 @@ def start_menu(logo):  # start menu, list of all function of this program
         -5: '•| ━━━━━━━━━━━━━❪✇❫━━━━━━━━━━━━━ |•',
         -4: '    Програма "Помічник Логіста"   (ver. 2.0)',
         -3: "•| ━━━━━━━━━━━━━❪✇❫━━━━━━━━━━━━━ |•",
-        -2: '╭────────────────╯⌬╰────────────────╮',
-        1: "Середні ціни на пальне          |",
-        2: "###########################    |",
-        3: "###########################     |",
-        4: "############################## |",
-        5: "###########################     |",
-        6: "############################## |",
-        7: "Збереження даних у файл         |",
-        8: "Про програму                   |",
-        0: "Вихід                           |",
-        -1: '╰────────────────╮⌬╭────────────────╯'
+        -2: '╭──────────────────────╯⌬╰──────────────────────╮',
+        1: "Середні ціни на пальне                    |",
+        2: "# Середня зарплата Логіста                |",
+        3: "#                                         |",
+        4: "#                                         |",
+        5: "#                                         |",
+        6: "Сервіси для вирахування вартості доставки |",
+        7: "Збереження даних у файл                   |",
+        8: "Про програму                              |",
+        0: "Вихід                                     |",
+        -1: '╰──────────────────────╮⌬╭──────────────────────╯'
     }
     for key, value in tasks_list.items():
         if key >= 0:
@@ -139,7 +158,7 @@ def main():
             elif number == 5:
                 pass
             elif number == 6:
-                pass
+                shipping_cost_services()
             elif number == 7:
                 save_to_file(check_userchoice("Виберіть пункт меню, який потрібно зберегти (1-6) ---> "))
             elif number == 8:
