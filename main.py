@@ -14,14 +14,9 @@ def continue_point():  # Clear console
 def check_userchoice(text): # Check input number of user
 	try:
 		number = int(input(text))
-		print(end='\n\n')
-		if number < 0 or number > 8:
-			os.system('clear')
-			print("Ви ввели невірне значення пункту меню.\n")
-			return None
 	except ValueError:
 		os.system('clear')
-		print("Ви ввели невірне значення.\n")
+		print("{ERROR} Ви ввели невірне значення.\n")
 		return None
 	else:
 		return number
@@ -30,12 +25,12 @@ def check_userchoice(text): # Check input number of user
 def last_logistic_news(view=True):  # Value 1
 	title, data = Scrap("https://logist.fm/news").get_last_news()
 	if view:
-		number = check_userchoice("Введіть кількість новин (1-8) ---> ")
-		if number == None or number not in range(1,9):
+		number = check_userchoice("Введіть кількість новин (1-15) ---> ")
+		if number == None or number not in range(1,16):
 			print("Виникла помилка, невірне значення")
 			continue_point()
 		else:
-			print(f"___<{title}>___")
+			print(f"\n___<{title}>___")
 			cnt = 0
 			for key, value in data.items():
 				print(f"<{key}>:\n{value}")
@@ -52,17 +47,17 @@ def flat_price(view=True): # Value 2
 	if view:
 		number = check_userchoice("Введіть кількість оголошень (1-16) ---> ")
 		if number == None or number not in range(1,17):
-			print("Виникла помилка, невірне значення")
+			print("{ERROR} Виникла помилка, невірне значення")
 			continue_point()
-	
-		print(f"___<{title}>___")
-		cnt = 1
-		for key, value in data.items():
-			print(f"{cnt}) {key}\n{value}\n")
-			cnt += 1
-			if cnt > number:
-				break
-		continue_point()
+		else:
+			print(f"___<{title}>___")
+			cnt = 1
+			for key, value in data.items():
+				print(f"{cnt}) {key}\n{value}\n")
+				cnt += 1
+				if cnt > number:
+					break
+			continue_point()
 	else:
 		return title, data
 	
@@ -79,7 +74,6 @@ def exchange_rate(view=True): # Value 3
 
 def get_fuel_price(view=True):  # Value 4
 	title, data = Scrap("https://index.minfin.com.ua/ua/markets/fuel/").get_fuelprice_data()
-	
 	if view:
 		print(f"___<{title}>___")
 		cnt = 1
@@ -93,7 +87,6 @@ def get_fuel_price(view=True):  # Value 4
 
 def average_logistics_salary(view=True):  # Value 5
 	title, data = Scrap("https://www.work.ua/salary-%D0%BB%D0%BE%D0%B3%D0%B8%D1%81%D1%82/").get_logist_salary()
-	
 	if view:
 		print(f"___<{title}>___")
 		cnt = 1
@@ -121,14 +114,15 @@ def shipping_cost_services(view=True): # Value 6
 		for key, value in services.items():
 			print(f"{_cnt}) {key}:"," "*(10-len(key)), value)
 			_cnt += 1
+		continue_point()
 	else:
 		return "Вирахування вартості доставки", services
-	continue_point()
 
 
-def save_to_file(number):  # Value 7
+def save_to_file():  # Value 7
+	number = check_userchoice("Виберіть пункт меню, який потрібно зберегти (1-6) ---> ")
 	if number == None or number not in range(1,7):
-		print("Виникла помилка, дані не збережено")
+		print("{ERROR} Виникла помилка, дані не збережено")
 		continue_point()
 	else:
 		if number == 1:
@@ -172,13 +166,13 @@ def program_exit():  # Value 0
 
 def start_menu(logo):  # start menu, list of all function of this program
     tasks_list = {
-        -5: '•| ━━━━━━━━━━━━━❪✇❫━━━━━━━━━━━━━ |•',
-        -4: '    Програма "Помічник Логіста"   (ver. 2.0)',
-        -3: "•| ━━━━━━━━━━━━━❪✇❫━━━━━━━━━━━━━ |•",
+        -5: '•| ━━━━━━━━━━━━━━━━━━━━❪✇❫━━━━━━━━━━━━━━━━━━━━━ |•',
+        -4: '    	Програма "Помічник Логіста"   (ver. 2.0)',
+        -3: "•| ━━━━━━━━━━━━━━━━━━━━❪✇❫━━━━━━━━━━━━━━━━━━━━━ |•",
         -2: '╭──────────────────────╯⌬╰──────────────────────╮',
         1: "Останні новини у Логістиці                |",
-        2: "Оренда приміщень         				  |",
-        3: "Курс валют             				      |",
+        2: "Оренда приміщень                          |",
+        3: "Курс валют                                |",
         4: "Середні ціни на пальне                    |",
         5: "Середня зарплата Логіста                  |",
         6: "Сервіси для вирахування вартості доставки |",
@@ -195,33 +189,35 @@ def start_menu(logo):  # start menu, list of all function of this program
 
 
 def main():
-    program_name = True  # show program logo
-    while True:
-        start_menu(program_name)
-        number = check_userchoice("Виберіть пункт меню із списку --> ")
-        if number == None:
-            program_name = False
-            continue
-        else:
-            if number == 1:  
-                last_logistic_news()
-            elif number == 2:
-                flat_price()
-            elif number == 3:
-                exchange_rate()
-            elif number == 4:
-                get_fuel_price()
-            elif number == 5:
-                average_logistics_salary()
-            elif number == 6:
-                shipping_cost_services()
-            elif number == 7:
-                save_to_file(check_userchoice("Виберіть пункт меню, який потрібно зберегти (1-6) ---> "))
-            elif number == 8:
-                program_info()
-            else:
-                program_exit()
-            program_name = False
+	program_name = True  # show program logo
+	while True:
+		start_menu(program_name)
+		number = check_userchoice("Виберіть пункт меню із списку --> ")
+		if (number not in [1,2,3,4,5,6,7,8,0]) or number == None:
+			program_name = False
+			os.system("clear")
+			print("{ERROR} Виникла помилка, невірне значення\n")
+			continue
+		else:
+			if number == 1:
+				last_logistic_news()
+			elif number == 2:
+				flat_price()
+			elif number == 3:
+				exchange_rate()
+			elif number == 4:
+				get_fuel_price()
+			elif number == 5:
+				average_logistics_salary()
+			elif number == 6:
+				shipping_cost_services()
+			elif number == 7:
+				save_to_file()
+			elif number == 8:
+				program_info()
+			elif number == 0:
+				program_exit()
+			program_name = False
 
 
 if __name__ == "__main__":
