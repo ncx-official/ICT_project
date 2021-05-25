@@ -27,7 +27,57 @@ def check_userchoice(text): # Check input number of user
 		return number
 
 
-def get_fuel_price(view=True):  # Value 1
+def last_logistic_news(view=True):  # Value 1
+	title, data = Scrap("https://logist.fm/news").get_last_news()
+	if view:
+		number = check_userchoice("Введіть кількість новин (1-8) ---> ")
+		if number == None or number not in range(1,9):
+			print("Виникла помилка, невірне значення")
+			continue_point()
+		else:
+			print(f"___<{title}>___")
+			cnt = 0
+			for key, value in data.items():
+				print(f"<{key}>:\n{value}")
+				cnt += 1
+				if cnt >= number:
+					break
+			continue_point()
+	else:
+		return title, data
+
+
+def flat_price(view=True): # Value 2
+	title, data = Scrap("https://dom.ria.com/uk/arenda-kom-nedvizhimosti/vinnitsa-pomeshcheniye/").get_flat_price()
+	if view:
+		number = check_userchoice("Введіть кількість оголошень (1-16) ---> ")
+		if number == None or number not in range(1,17):
+			print("Виникла помилка, невірне значення")
+			continue_point()
+	
+		print(f"___<{title}>___")
+		cnt = 1
+		for key, value in data.items():
+			print(f"{cnt}) {key}\n{value}\n")
+			cnt += 1
+			if cnt > number:
+				break
+		continue_point()
+	else:
+		return title, data
+	
+
+def exchange_rate(view=True): # Value 3
+	title, data = Scrap("https://my.ukrsibbank.com/ua/personal/operations/currency_exchange/").get_exchange_rate()
+	if view:
+		print(f"___<{title}>___")
+		for key, value in data.items():
+			print(f"{key+1}){value}\n")
+		continue_point()
+	else:
+		return title, data
+
+def get_fuel_price(view=True):  # Value 4
 	title, data = Scrap("https://index.minfin.com.ua/ua/markets/fuel/").get_fuelprice_data()
 	
 	if view:
@@ -41,7 +91,7 @@ def get_fuel_price(view=True):  # Value 1
 		return title, data
 
 
-def average_logistics_salary(view=True):  # Value 2
+def average_logistics_salary(view=True):  # Value 5
 	title, data = Scrap("https://www.work.ua/salary-%D0%BB%D0%BE%D0%B3%D0%B8%D1%81%D1%82/").get_logist_salary()
 	
 	if view:
@@ -53,18 +103,6 @@ def average_logistics_salary(view=True):  # Value 2
 		continue_point()
 	else:
 		return title, data
-
-
-def third():
-	pass
-
-
-def fourth():
-	pass
-
-
-def fifth():
-	pass
 
 
 def shipping_cost_services(view=True): # Value 6
@@ -94,15 +132,15 @@ def save_to_file(number):  # Value 7
 		continue_point()
 	else:
 		if number == 1:
-			title, data = get_fuel_price(False)
+			title, data = last_logistic_news(False)
 		elif number == 2:
-			title, data = average_logistics_salary(False)
+			title, data = flat_price(False)
 		elif number == 3:
-			title, data = third(False)
+			title, data = exchange_rate(False)
 		elif number == 4:
-			title, data = fourth(False)
+			title, data = get_fuel_price(False)
 		elif number == 5:
-			title, data= fifth(False)
+			title, data = average_logistics_salary(False)
 		else:
 			title, data = shipping_cost_services(False)
 		try:
@@ -138,11 +176,11 @@ def start_menu(logo):  # start menu, list of all function of this program
         -4: '    Програма "Помічник Логіста"   (ver. 2.0)',
         -3: "•| ━━━━━━━━━━━━━❪✇❫━━━━━━━━━━━━━ |•",
         -2: '╭──────────────────────╯⌬╰──────────────────────╮',
-        1: "Середні ціни на пальне                    |",
-        2: "Середня зарплата Логіста                  |",
-        3: "#                                         |",
-        4: "#                                         |",
-        5: "#                                         |",
+        1: "Останні новини у Логістиці                |",
+        2: "Оренда приміщень         				  |",
+        3: "Курс валют             				      |",
+        4: "Середні ціни на пальне                    |",
+        5: "Середня зарплата Логіста                  |",
         6: "Сервіси для вирахування вартості доставки |",
         7: "Збереження даних у файл                   |",
         8: "Про програму                              |",
@@ -165,16 +203,16 @@ def main():
             program_name = False
             continue
         else:
-            if number == 1:  # Fuel price in Ukraine
-                get_fuel_price()
+            if number == 1:  
+                last_logistic_news()
             elif number == 2:
-                average_logistics_salary()
+                flat_price()
             elif number == 3:
-                pass
+                exchange_rate()
             elif number == 4:
-                pass
+                get_fuel_price()
             elif number == 5:
-                pass
+                average_logistics_salary()
             elif number == 6:
                 shipping_cost_services()
             elif number == 7:
