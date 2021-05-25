@@ -21,6 +21,34 @@ def check_userchoice(text): # Check input number of user
 	else:
 		return number
 
+def show_content(title, data, number=100, id=1):
+	count = 0
+	print(f"\n________<{title}>________")
+	if id == 1:
+		for key, value in data.items():
+			print(f"{count+1}) <{key}>:\n\n{value}")
+			count += 1
+			if count == number:
+				break
+	elif id == 2:
+		for key, value in data.items():
+			print(f"{count+1}) {key}:\n{value}\n")
+			count += 1
+			if count == number:
+				break
+	elif id == 3:
+		for key, value in data.items():
+			print(f"{key+1}) {value}\n")
+			if count == number:
+				break
+	elif id == 4:
+		for key, value in data.items():
+			print(f"{count+1}) {key}:  {value} грн.")
+			count += 1
+			if count == number:
+				break
+	continue_point() 
+
 
 def last_logistic_news(view=True):  # Value 1
 	title, data = Scrap("https://logist.fm/news").get_last_news()
@@ -30,14 +58,7 @@ def last_logistic_news(view=True):  # Value 1
 			print("Виникла помилка, невірне значення")
 			continue_point()
 		else:
-			print(f"\n___<{title}>___")
-			cnt = 0
-			for key, value in data.items():
-				print(f"<{key}>:\n{value}")
-				cnt += 1
-				if cnt >= number:
-					break
-			continue_point()
+			show_content(title, data, number)
 	else:
 		return title, data
 
@@ -50,14 +71,7 @@ def flat_price(view=True): # Value 2
 			print("{ERROR} Виникла помилка, невірне значення")
 			continue_point()
 		else:
-			print(f"___<{title}>___")
-			cnt = 1
-			for key, value in data.items():
-				print(f"{cnt}) {key}\n{value}\n")
-				cnt += 1
-				if cnt > number:
-					break
-			continue_point()
+			show_content(title, data, number, id=2)
 	else:
 		return title, data
 	
@@ -65,22 +79,14 @@ def flat_price(view=True): # Value 2
 def exchange_rate(view=True): # Value 3
 	title, data = Scrap("https://my.ukrsibbank.com/ua/personal/operations/currency_exchange/").get_exchange_rate()
 	if view:
-		print(f"___<{title}>___")
-		for key, value in data.items():
-			print(f"{key+1}){value}\n")
-		continue_point()
+		show_content(title, data, id=3)
 	else:
 		return title, data
 
 def get_fuel_price(view=True):  # Value 4
 	title, data = Scrap("https://index.minfin.com.ua/ua/markets/fuel/").get_fuelprice_data()
 	if view:
-		print(f"___<{title}>___")
-		cnt = 1
-		for key, value in data.items():
-			print(f"{cnt}) {key}:  {value} грн.")
-			cnt += 1
-		continue_point()
+		show_content(title, data, id=4)
 	else:
 		return title, data
 
@@ -88,17 +94,13 @@ def get_fuel_price(view=True):  # Value 4
 def average_logistics_salary(view=True):  # Value 5
 	title, data = Scrap("https://www.work.ua/salary-%D0%BB%D0%BE%D0%B3%D0%B8%D1%81%D1%82/").get_logist_salary()
 	if view:
-		print(f"___<{title}>___")
-		cnt = 1
-		for key, value in data.items():
-			print(f"{cnt}) {key}:  {value}")
-			cnt += 1
-		continue_point()
+		show_content(title, data, id=4)
 	else:
 		return title, data
 
 
 def shipping_cost_services(view=True): # Value 6
+	title = "Сервіси для вирахування вартості доставки"
 	services = {
 		"Нова Пошта": "https://novaposhta.ua/delivery",
 		"Укрпошта": "https://calc.ukrposhta.ua/domestic-calculator",
@@ -109,14 +111,9 @@ def shipping_cost_services(view=True): # Value 6
 		"Автолюкс": "https://autolux-post.com.ua/calc/"
 	}
 	if view:
-		_cnt = 1
-		print("___<Сервіс>_______<Силка на сайт для обрахунків>_______")
-		for key, value in services.items():
-			print(f"{_cnt}) {key}:"," "*(10-len(key)), value)
-			_cnt += 1
-		continue_point()
+		show_content(title, services, id=4)
 	else:
-		return "Вирахування вартості доставки", services
+		return title, services
 
 
 def save_to_file():  # Value 7
